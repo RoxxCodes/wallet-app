@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 import { getWallet } from "../api/walletApi";
 
 export const WalletContext = createContext();
@@ -8,14 +8,20 @@ export const WalletProvider = ({ children }) => {
 
   const fetchWallet = async () => {
     const storedWalletId = sessionStorage.getItem("walletId");
-    if (storedWalletId) {
+    if (!storedWalletId) {
+      return;
+    }
+
+    try {
       const res = await getWallet(storedWalletId);
       setWallet(res.data);
+    } catch (error) {
+      console.error("Failed to fetch wallet:", error);
     }
   };
 
   useEffect(() => {
-   fetchWallet();
+    fetchWallet();
   }, []);
 
   return (

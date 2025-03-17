@@ -26,8 +26,8 @@ const WalletDashboard = () => {
         <h1>Wallet Dashboard</h1>
         <BalanceDisplay balance={wallet?.balance} />
         <div className="button-group">
-            <button onClick={() => navigate("/create-transaction")}>Add Transaction</button>
-            <button onClick={handleExportCSV}>Download CSV</button>
+            <button disabled={!wallet} onClick={() => navigate("/create-transaction")}>Add Transaction</button>
+            <button disabled={!wallet} onClick={handleExportCSV}>Download CSV</button>
         </div>
         {wallet ? <TransactionsList walletId={wallet.id} exportCsvRef={exportCsvRef} /> : <p>Loading wallet...</p>}
     </div>

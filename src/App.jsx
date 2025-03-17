@@ -2,17 +2,20 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import WalletDashboard from "./pages/WalletDashboard";
 import SetupWallet from "./pages/SetupWallet";
 import CreateTransaction from "./pages/CreateTransaction";
+import ServerErrorPage from "./pages/ServerErrorPage";
 
 function App() {
+
   const walletId = sessionStorage.getItem("walletId");
+
   return (
-    <div>
       <Routes>
         <Route path="/" element={walletId ? <WalletDashboard /> : <SetupWallet />} />
         <Route path="/create-transaction" element={walletId ? <CreateTransaction /> : <Navigate to="/" />} />
-        <Route path="*" element={<Navigate to="/" />} />  {/* Catch-all redirects to home */}
+        <Route path="/server-error" element={<ServerErrorPage />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </div>
+
   );
 }
 
