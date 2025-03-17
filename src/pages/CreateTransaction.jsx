@@ -3,7 +3,7 @@ import { WalletContext } from "../context/WalletProvider";
 import TransactionForm from "../components/TransactionForm"
 import BalanceDisplay from "../components/BalanceDisplay";
 
-function CreateTransaction() {
+const CreateTransaction = () => {
     const { wallet } = useContext(WalletContext);
     return (
         <div>

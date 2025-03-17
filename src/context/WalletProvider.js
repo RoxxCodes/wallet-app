@@ -3,7 +3,7 @@ import { getWallet } from "../api/walletApi";
 
 export const WalletContext = createContext();
 
-export function WalletProvider({ children }) {
+export const WalletProvider = ({ children }) => {
   const [wallet, setWallet] = useState(null);
 
   const fetchWallet = async () => {

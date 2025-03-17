@@ -8,8 +8,9 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="*" element={walletId ? <WalletDashboard /> : <SetupWallet />} />
-        <Route path="/create-transaction" element={walletId ? <CreateTransaction /> : <Navigate to="*" />} />
+        <Route path="/" element={walletId ? <WalletDashboard /> : <SetupWallet />} />
+        <Route path="/create-transaction" element={walletId ? <CreateTransaction /> : <Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/" />} />  {/* Catch-all redirects to home */}
       </Routes>
     </div>
   );

@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useImperativeHandle, forwardRef } from "react";
 import { getTransactions } from "../api/transactionApi";
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
     TableSortLabel, Paper, TablePagination
 } from "@mui/material";
 import { getFormattedDate } from '../utility';
+import "../styles/TransactionsList.css";
 
-function TransactionsList({ walletId }) {
+const TransactionsList = forwardRef(({ walletId, exportCsvRef }, ref) => {
     const [transactions, setTransactions] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [orderBy, setOrderBy] = useState("date");
@@ -21,7 +22,6 @@ function TransactionsList({ walletId }) {
 
     const fetchTransactions = async () => {
         const response = await getTransactions(walletId, page * rowsPerPage, rowsPerPage);
-        console.log("transactions", response.data.transactions);
         setTransactions(response.data.transactions);
         setTotalCount(response.data.totalCount || 0);
         setHasMore(response.data.hasMore || false);
@@ -60,15 +60,16 @@ function TransactionsList({ walletId }) {
             `${txn.type},${txn.amount},${txn.description},${getFormattedDate(txn.createdAt)}`
         ));
         const csvContent = csvHeaders + csvRows.join("\n");
-        downloadCSV(csvContent, "transactions.csv");
+        downloadCSV(csvContent, `transactions_${new Date().getTime()}.csv`);
     };
 
+    useImperativeHandle(exportCsvRef, () => exportToCSV);
+
     return (
-        <div>
-            <button onClick={exportToCSV}>Download CSV</button>
+        <div className="transactions-container">
             <h1>Transaction History</h1>
             <TableContainer component={Paper}>
-                <Table>
+                <Table className="transaction-table">
                     <TableHead>
                         <TableRow>
                             {[
@@ -120,5 +121,6 @@ function TransactionsList({ walletId }) {
             />
         </div>
     );
-}
+});
+
 export default TransactionsList;
