@@ -57,7 +57,7 @@ const TransactionsList = forwardRef(({ walletId, exportCsvRef }, ref) => {
     const exportToCSV = () => {
         const csvHeaders = "Type,Amount,Description,Date\n";
         const csvRows = transactions.map(txn => (
-            `${txn.type},${txn.amount},${txn.description},${getFormattedDate(txn.createdAt)}`
+            `${txn.type},${txn.amount.toString().replace(/,/g, '')},${txn.description.toString().replace(/,/g, '')},${getFormattedDate(txn.createdAt)}`
         ));
         const csvContent = csvHeaders + csvRows.join("\n");
         downloadCSV(csvContent, `transactions_${new Date().getTime()}.csv`);
