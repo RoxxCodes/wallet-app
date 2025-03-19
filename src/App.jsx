@@ -6,7 +6,7 @@ import ServerErrorPage from "./pages/ServerErrorPage";
 
 function App() {
 
-  const walletId = sessionStorage.getItem("walletId");
+  const walletId = localStorage.getItem("walletId");
 
   return (
       <Routes>

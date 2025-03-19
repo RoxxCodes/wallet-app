@@ -7,7 +7,7 @@ export const WalletProvider = ({ children }) => {
   const [wallet, setWallet] = useState(null);
 
   const fetchWallet = async () => {
-    const storedWalletId = sessionStorage.getItem("walletId");
+    const storedWalletId = localStorage.getItem("walletId");
     if (!storedWalletId) {
       return;
     }

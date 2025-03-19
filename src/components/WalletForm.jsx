@@ -26,7 +26,7 @@ const WalletForm = ({ onWalletCreated }) => {
 
         try {
             const response = await createWallet(name, parseFloat(balance) || 0);
-            sessionStorage.setItem("walletId", response.data.id);
+            localStorage.setItem("walletId", response.data.id);
             onWalletCreated();
         } catch (err) {
             setError("Failed to create wallet. Please try again.");
