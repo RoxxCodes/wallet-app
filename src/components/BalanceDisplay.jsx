@@ -1,10 +1,12 @@
+import BigNumber from "bignumber.js";
 import "../styles/BalanceDisplay.css";
+
 
 const BalanceDisplay = ({ balance }) => {
     return (
         <h2 className="balance-container">
             Balance: ₹<span className={balance !== undefined ? "" : "balance-loading"}>
-                {balance ?? "Loading..."}
+                {new BigNumber(balance).toFormat(4) ?? "Loading..."}
             </span>
         </h2>
     );

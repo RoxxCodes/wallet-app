@@ -8,7 +8,8 @@ import "../styles/WalletDashboard.css";
 
 const WalletDashboard = () => {
     const exportCsvRef = useRef(null);
-    const { wallet, fetchWallet } = useContext(WalletContext);
+    const { wallet, fetchWallet, walletNotFound } = useContext(WalletContext);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,15 +22,32 @@ const WalletDashboard = () => {
         }
     };
 
+    const createWallet = () => {
+        localStorage.removeItem("walletId");
+        window.location.reload();
+    }
+
     return (
         <div className="dashboard-container">
         <h1>Wallet Dashboard</h1>
-        <BalanceDisplay balance={wallet?.balance} />
-        <div className="button-group">
-            <button disabled={!wallet} onClick={() => navigate("/create-transaction")}>Add Transaction</button>
-            <button disabled={!wallet} onClick={handleExportCSV}>Download CSV</button>
-        </div>
-        {wallet ? <TransactionsList walletId={wallet.id} exportCsvRef={exportCsvRef} /> : <p>Loading wallet...</p>}
+        { wallet ? (
+            <>
+                <BalanceDisplay balance={wallet?.balance} />
+                <div className="button-group">
+                    <button disabled={!wallet} onClick={() => navigate("/create-transaction")}>Add Transaction</button>
+                    <button disabled={!wallet} onClick={handleExportCSV}>Download CSV</button>
+                </div>
+                <TransactionsList walletId={wallet.id} exportCsvRef={exportCsvRef} />
+            </>
+        ): walletNotFound ? (
+            <div>
+                    <p>Wallet not found. Create a new wallet.</p>
+                    <button onClick={createWallet}>Create New Wallet</button>
+                </div>
+        ) : (
+            <p>Loading wallet...</p>
+        )}
+        
     </div>
     );
 }

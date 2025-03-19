@@ -4,8 +4,9 @@ import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
     TableSortLabel, Paper, TablePagination
 } from "@mui/material";
-import { getFormattedDate } from '../utility';
+import { getFormattedDate, sortTransactions } from '../utility';
 import "../styles/TransactionsList.css";
+import BigNumber from "bignumber.js";
 
 const TransactionsList = forwardRef(({ walletId, exportCsvRef }, ref) => {
     const [transactions, setTransactions] = useState([]);
@@ -32,17 +33,6 @@ const TransactionsList = forwardRef(({ walletId, exportCsvRef }, ref) => {
         setOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
     };
 
-    const sortedTransactions = [...transactions].sort((a, b) => {
-        if (orderBy === "date") {
-            return order === "asc"
-                ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-                : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        } else if (orderBy === "amount") {
-            return order === "asc" ? a.amount - b.amount : b.amount - a.amount;
-        }
-        return order === "asc" ? a[orderBy].localeCompare(b[orderBy]) : b[orderBy].localeCompare(a[orderBy]);
-    });
-
     const downloadCSV = (csvContent, filename) => {
         const blob = new Blob([csvContent], { type: "text/csv" });
         const url = URL.createObjectURL(blob);
@@ -57,7 +47,7 @@ const TransactionsList = forwardRef(({ walletId, exportCsvRef }, ref) => {
     const exportToCSV = () => {
         const csvHeaders = "Type,Amount,Description,Date\n";
         const csvRows = transactions.map(txn => (
-            `${txn.type},${txn.amount.toString().replace(/,/g, '')},${txn.description.toString().replace(/,/g, '')},${getFormattedDate(txn.createdAt)}`
+            `${txn.type},${txn.amount},${txn.description.toString()},${getFormattedDate(txn.createdAt)}`
         ));
         const csvContent = csvHeaders + csvRows.join("\n");
         downloadCSV(csvContent, `transactions_${new Date().getTime()}.csv`);
@@ -91,10 +81,10 @@ const TransactionsList = forwardRef(({ walletId, exportCsvRef }, ref) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {sortedTransactions.map((txn) => (
+                        {sortTransactions(transactions, orderBy, order).map((txn) => (
                             <TableRow key={txn.id}>
                                 <TableCell>{txn.type}</TableCell>
-                                <TableCell>₹{txn.amount}</TableCell>
+                                <TableCell>₹{new BigNumber(txn.amount).toFormat(4)}</TableCell>
                                 <TableCell>{txn.description}</TableCell>
                                 <TableCell>{getFormattedDate(txn.createdAt)}</TableCell>
                             </TableRow>

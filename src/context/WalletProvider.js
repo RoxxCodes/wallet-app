@@ -5,6 +5,7 @@ export const WalletContext = createContext();
 
 export const WalletProvider = ({ children }) => {
   const [wallet, setWallet] = useState(null);
+  const [walletNotFound, setWalletNotFound] = useState(false);
 
   const fetchWallet = async () => {
     const storedWalletId = localStorage.getItem("walletId");
@@ -16,6 +17,9 @@ export const WalletProvider = ({ children }) => {
       const res = await getWallet(storedWalletId);
       setWallet(res.data);
     } catch (error) {
+      if (error.response?.status === 404) {
+        setWalletNotFound(true);
+      }
       console.error("Failed to fetch wallet:", error);
     }
   };
@@ -25,7 +29,7 @@ export const WalletProvider = ({ children }) => {
   }, []);
 
   return (
-    <WalletContext.Provider value={{ wallet, setWallet, fetchWallet }}>
+    <WalletContext.Provider value={{ wallet, setWallet, fetchWallet, walletNotFound }}>
       {children}
     </WalletContext.Provider>
   );
