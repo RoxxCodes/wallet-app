@@ -1,6 +1,5 @@
-import axios from "axios";
-import { API_BASE_URL } from "./Constants";
+import api from "./api";
 
-export const createWallet = (name, balance) => axios.post(`${API_BASE_URL}/wallet/setup`, { name, balance });
-export const getWallet = (walletId) => axios.get(`${API_BASE_URL}/wallet/${walletId}`);
+export const createWallet = (name, balance) => api.post(`/wallet/setup`, { name, balance });
+export const getWallet = (walletId) => api.get(`/wallet/${walletId}`);
 
