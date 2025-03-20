@@ -25,4 +25,4 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### You can check the UI on
-http://ec2-3-80-198-194.compute-1.amazonaws.com/
+http://ec2-44-203-69-161.compute-1.amazonaws.com/
